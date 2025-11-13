@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: posts-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  posts:
+    build: .
+    container_name: posts-service
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/posts-db
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
+    driver: local
