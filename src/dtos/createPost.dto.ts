@@ -1,5 +1,5 @@
 export interface CreatePostDto {
-  author_id: string;
+  author_id: number; 
   description: string;
   media_url?: string;
   media_type?: string;

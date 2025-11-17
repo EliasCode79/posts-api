@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package users;
+
+option go_package = "github.com/antoniocfetngnu/users-api/proto";
+
+service UsersService {
+  // Get single user by ID
+  rpc GetUser (GetUserRequest) returns (UserResponse);
+  
+  // Get multiple users by IDs (batch)
+  rpc GetUsers (GetUsersRequest) returns (UsersResponse);
+}
+
+message GetUserRequest {
+  uint32 user_id = 1;
+}
+
+message GetUsersRequest {
+  repeated uint32 user_ids = 1;
+}
+
+message UserResponse {
+  uint32 id = 1;
+  string username = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string email = 5;
+  string created_at = 6;
+  string updated_at = 7;
+}
+
+message UsersResponse {
+  repeated UserResponse users = 1;
+}
