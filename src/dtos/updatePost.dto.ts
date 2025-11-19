@@ -1,3 +1,4 @@
+// posts-api/src/dtos/updatePost.dto.ts
 export interface UpdatePostDto {
   description?: string;
   media_url?: string;
@@ -5,3 +6,4 @@ export interface UpdatePostDto {
   tags?: string[];
   engagement_score?: number;
 }
+

@@ -1,3 +1,4 @@
+// posts-api/src/models/post.model.ts
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPost extends Document {

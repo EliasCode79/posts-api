@@ -27,7 +27,9 @@ app.use(cookieParser()); // NEW: Parse cookies
 app.get("/api/posts/health", (req, res) => {
   res.json({ status: "OK", service: "posts-service" });
 });
-
+app.head("/api/posts/health", (req, res) => {
+  res.status(200).end();
+});
 // Routes
 app.use("/api/posts", postRoutes);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

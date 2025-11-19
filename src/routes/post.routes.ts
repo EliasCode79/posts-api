@@ -1,6 +1,8 @@
+// posts-api/src/routes/post.routes.ts
 import { Router } from "express";
 import { PostController } from "../controllers/post.controller";
 import { extractUserFromJWT, optionalAuth } from "../middleware/auth.middleware";
+import { upload } from "../middleware/upload.middleware";
 
 /**
  * @swagger
@@ -108,7 +110,7 @@ router.get("/:id", controller.findById);
  *       401:
  *         description: No autenticado
  */
-router.post("/", extractUserFromJWT, controller.create);
+router.post("/", extractUserFromJWT, upload.single('media_file'), controller.create);
 
 /**
  * @swagger
@@ -153,5 +155,11 @@ router.put("/:id", extractUserFromJWT, controller.update);
  *         description: No autorizado (no eres el autor)
  */
 router.delete("/:id", extractUserFromJWT, controller.delete);
+
+router.post("/:id/like", extractUserFromJWT, controller.likePost);
+
+router.delete("/:id/like", extractUserFromJWT, controller.unlikePost);
+
+router.post("/:id/comments", extractUserFromJWT, controller.createComment);
 
 export default router;
