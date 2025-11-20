@@ -156,6 +156,35 @@ router.put("/:id", extractUserFromJWT, controller.update);
  */
 router.delete("/:id", extractUserFromJWT, controller.delete);
 
+/**
+ * @swagger
+ * /api/posts/{id}/like:
+ *   get:
+ *     summary: Check if current user liked a post
+ *     tags: [Posts]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Returns whether user liked the post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 liked:
+ *                   type: boolean
+ *       401:
+ *         description: No autenticado
+ */
+router.get("/:id/like", extractUserFromJWT, controller.checkLikeStatus);
+
 router.post("/:id/like", extractUserFromJWT, controller.likePost);
 
 router.delete("/:id/like", extractUserFromJWT, controller.unlikePost);

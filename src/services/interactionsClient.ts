@@ -1,7 +1,8 @@
 // posts-api/src/services/interactionsClient.ts
-import axios from 'axios';
+import axios from "axios";
 
-const INTERACTIONS_SERVICE_URL = process.env.INTERACTIONS_SERVICE_URL || 'http://interactions-service:3000';
+const INTERACTIONS_SERVICE_URL =
+  process.env.INTERACTIONS_SERVICE_URL || "http://interactions-service:3000";
 
 export interface PostInteractions {
   postId: string;
@@ -34,7 +35,9 @@ class InteractionsClient {
 
   async getPostInteractions(postId: string): Promise<PostInteractions> {
     try {
-      const response = await this.client.get(`/api/interactions/posts/${postId}`);
+      const response = await this.client.get(
+        `/api/interactions/posts/${postId}`
+      );
       return response.data;
     } catch (error) {
       console.error(`Error fetching interactions for post ${postId}:`, error);
@@ -43,42 +46,84 @@ class InteractionsClient {
         postId,
         likesCount: 0,
         commentsCount: 0,
-        lastActivityAt: null
+        lastActivityAt: null,
       };
     }
   }
 
-  async getBatchPostInteractions(postIds: string[]): Promise<PostInteractions[]> {
+  async getBatchPostInteractions(
+    postIds: string[]
+  ): Promise<PostInteractions[]> {
     if (postIds.length === 0) return [];
 
     try {
       // Since your interactions service doesn't have a batch endpoint yet,
       // we'll make individual requests in parallel
-      const promises = postIds.map(postId => this.getPostInteractions(postId));
+      const promises = postIds.map((postId) =>
+        this.getPostInteractions(postId)
+      );
       return await Promise.all(promises);
     } catch (error) {
-      console.error('Error fetching batch interactions:', error);
-      return postIds.map(postId => ({
+      console.error("Error fetching batch interactions:", error);
+      return postIds.map((postId) => ({
         postId,
         likesCount: 0,
         commentsCount: 0,
-        lastActivityAt: null
+        lastActivityAt: null,
       }));
     }
   }
 
-  async getPostComments(postId: string, limit: number = 3, offset: number = 0): Promise<CommentsResponse> {
+  async checkUserLikedPost(
+    postId: string,
+    userId: string,
+    authCookie?: string
+  ): Promise<boolean> {
     try {
-      const response = await this.client.get(`/api/interactions/posts/${postId}/comments`, {
-        params: { limit, offset }
-      });
+      const config: any = {
+        timeout: 5000,
+      };
+
+      // Add auth cookie if provided
+      if (authCookie) {
+        config.headers = {
+          Cookie: `auth_token=${authCookie}`,
+        };
+      }
+
+      const response = await this.client.get(
+        `/api/interactions/posts/${postId}/like`,
+        config
+      );
+      return response.data.liked;
+    } catch (error) {
+      console.error(
+        `Error checking user like status for post ${postId}:`,
+        error
+      );
+      return false;
+    }
+  }
+
+  async getPostComments(
+    postId: string,
+    limit: number = 3,
+    offset: number = 0
+  ): Promise<CommentsResponse> {
+    try {
+      const response = await this.client.get(
+        `/api/interactions/posts/${postId}/comments`,
+        {
+          params: { limit, offset },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error(`Error fetching comments for post ${postId}:`, error);
       return {
         comments: [],
         total: 0,
-        hasMore: false
+        hasMore: false,
       };
     }
   }

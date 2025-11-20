@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser"; // NEW
 import postRoutes from "./routes/post.routes";
+import feedRoutes from "./routes/feed.routes";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
 
@@ -32,6 +33,7 @@ app.head("/api/posts/health", (req, res) => {
 });
 // Routes
 app.use("/api/posts", postRoutes);
+app.use("/api/feed", feedRoutes);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Connect DB
