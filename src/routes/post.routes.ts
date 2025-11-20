@@ -159,6 +159,70 @@ router.delete("/:id", extractUserFromJWT, controller.delete);
 /**
  * @swagger
  * /api/posts/{id}/like:
+ *   post:
+ *     summary: Like a post
+ *     tags: [Posts]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Like queued for processing
+ *       401:
+ *         description: No autenticado
+ */
+/**
+ * @swagger
+ * /api/posts/{id}/like:
+ *   post:
+ *     summary: Like a post
+ *     tags: [Posts]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Like queued for processing
+ *       401:
+ *         description: No autenticado
+ */
+router.post("/:id/like", extractUserFromJWT, controller.likePost);
+
+/**
+ * @swagger
+ * /api/posts/{id}/unlike:
+ *   delete:
+ *     summary: Unlike a post
+ *     tags: [Posts]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Unlike queued for processing
+ *       401:
+ *         description: No autenticado
+ */
+router.delete("/:id/unlike", extractUserFromJWT, controller.unlikePost);
+
+/**
+ * @swagger
+ * /api/posts/{id}/like:
  *   get:
  *     summary: Check if current user liked a post
  *     tags: [Posts]
@@ -185,10 +249,7 @@ router.delete("/:id", extractUserFromJWT, controller.delete);
  */
 router.get("/:id/like", extractUserFromJWT, controller.checkLikeStatus);
 
-router.post("/:id/like", extractUserFromJWT, controller.likePost);
-
-router.delete("/:id/like", extractUserFromJWT, controller.unlikePost);
-
+// Comments route
 router.post("/:id/comments", extractUserFromJWT, controller.createComment);
 
 export default router;
